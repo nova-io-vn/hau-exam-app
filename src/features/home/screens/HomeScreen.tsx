@@ -7,12 +7,14 @@ import { AppScreen, Button, Card, StatusBadge } from '@/src/components/ui';
 import { AppHeader, DashboardMetricSkeleton, EmptyState, ErrorState, ListSkeleton } from '@/src/components/shared';
 import { useAuth } from '@/src/app/providers/AppProviders';
 import { questionApi, type Question, type QuestionStatistics } from '@/src/features/questions/api/questionApi';
-import { colors, spacing, typography } from '@/src/theme/tokens';
+import { colors as staticColors, spacing, typography } from '@/src/theme/tokens';
+import { useThemeColors } from '@/src/theme/useThemeColors';
 import { formatAcademicName } from '@/src/features/profile/utils/academicName';
 
 export function HomeScreen() {
   const router = useRouter();
   const { session } = useAuth();
+  const colors = useThemeColors();
   const [stats, setStats] = useState<QuestionStatistics | null>(null);
   const [recent, setRecent] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,11 +34,11 @@ export function HomeScreen() {
   const cards = [['Tổng câu hỏi', stats?.total ?? 0, 'document-text-outline'], ['Đã phê duyệt', stats?.approved ?? 0, 'checkmark-circle-outline'], ['Chờ duyệt', stats?.pendingReview ?? 0, 'time-outline'], ['Cần chỉnh sửa', stats?.needRevision ?? 0, 'create-outline']] as const;
   return <AppScreen><ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => void load(true)} tintColor={colors.accent} />} contentContainerStyle={styles.content}>
     <AppHeader title={`Xin chào, ${identity}`} subtitle={`Khoa ${faculty}`} />
-    <View style={styles.actions}><Button title="Tạo câu hỏi" icon={<Ionicons name="add-circle-outline" size={18} color={colors.white} />} onPress={() => router.push('/question/create')} /><Button title="Tạo bằng AI" variant="secondary" icon={<Ionicons name="sparkles-outline" size={18} color={colors.accent} />} onPress={() => router.push('/ai')} /></View>
+    <View style={styles.actions}><Button title="Tạo câu hỏi" icon={<Ionicons name="add-circle-outline" size={18} color={colors.white} />} onPress={() => router.push('/question/create')} /><Button title="Tạo bằng AI" variant="secondary" icon={<Ionicons name="sparkles-outline" size={18} color={colors.accent} />} onPress={() => router.push('/ai')} />{session?.role === 'SUBJECT_ADMIN' && <Button title="Quản lý đề thi" variant="secondary" icon={<Ionicons name="albums-outline" size={18} color={colors.accent} />} onPress={() => router.push('/exams')} />}</View>
     <View style={styles.grid}>{cards.map(([label, value, icon]) => <Card key={label} style={styles.stat}><Ionicons name={icon as keyof typeof Ionicons.glyphMap} size={20} color={colors.accent} /><Text style={styles.label}>{label}</Text><Text style={styles.value}>{value}</Text></Card>)}</View>
     <View style={styles.sectionHead}><Text style={styles.sectionTitle}>Câu hỏi gần đây</Text><Pressable onPress={() => router.push('/(tabs)/questions')}><Text style={styles.link}>Xem tất cả</Text></Pressable></View>
     {recent.length ? recent.map(item => <Pressable key={item.id} onPress={() => router.push({ pathname: '/question/[id]', params: { id: item.id } })}><Card><Text numberOfLines={2} style={styles.question}>{item.content}</Text><View style={styles.meta}><Text style={styles.muted}>{new Date(item.updatedAt).toLocaleDateString('vi-VN')}</Text><StatusBadge label={item.status} tone={item.status === 'APPROVED' ? 'success' : item.status === 'REJECTED' ? 'danger' : 'warning'} /></View></Card></Pressable>) : <EmptyState title="Chưa có câu hỏi" description="Tạo câu hỏi thủ công hoặc sử dụng AI hỗ trợ." />}
   </ScrollView></AppScreen>;
 }
 
-const styles = StyleSheet.create({ content: { gap: spacing.md, paddingBottom: spacing.xl }, actions: { flexDirection: 'row', gap: spacing.sm }, grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }, stat: { flexBasis: '48%', gap: spacing.xs }, label: { color: colors.textSecondary, fontSize: typography.caption }, value: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: spacing.xs }, sectionHead: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: spacing.md }, sectionTitle: { color: colors.text, fontSize: typography.body, fontWeight: '800' }, link: { color: colors.accent, fontSize: typography.caption, fontWeight: '700' }, question: { color: colors.text, fontSize: typography.label, fontWeight: '600' }, meta: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: spacing.md }, muted: { color: colors.textSecondary, fontSize: typography.caption } });
+const styles = StyleSheet.create({ content: { gap: spacing.md, paddingBottom: spacing.xl }, actions: { flexDirection: 'row', gap: spacing.sm }, grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }, stat: { flexBasis: '48%', gap: spacing.xs }, label: { color: staticColors.textSecondary, fontSize: typography.caption }, value: { color: staticColors.text, fontSize: 24, fontWeight: '800', marginTop: spacing.xs }, sectionHead: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: spacing.md }, sectionTitle: { color: staticColors.text, fontSize: typography.body, fontWeight: '800' }, link: { color: staticColors.accent, fontSize: typography.caption, fontWeight: '700' }, question: { color: staticColors.text, fontSize: typography.label, fontWeight: '600' }, meta: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginTop: spacing.md }, muted: { color: staticColors.textSecondary, fontSize: typography.caption } });
