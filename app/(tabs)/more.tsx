@@ -17,7 +17,7 @@ const common:Item[]=[
   {title:'Đăng xuất',icon:'log-out-outline',path:'/logout'},
 ];
 const itemsByRole:Record<MobileRole,Item[]>={
-  USER:[{title:'AI',subtitle:'Tạo câu hỏi bằng AI',icon:'sparkles-outline',path:'/ai'},{title:'Tài liệu AI',subtitle:'Quản lý học liệu đã tải lên',icon:'folder-open-outline',path:'/ai'},...common],
+  USER:[{title:'Công việc được giao',subtitle:'Theo dõi chỉ tiêu và tiến độ biên soạn',icon:'clipboard-outline',path:'/assignments'},{title:'AI',subtitle:'Tạo câu hỏi bằng AI',icon:'sparkles-outline',path:'/ai'},{title:'Tài liệu AI',subtitle:'Quản lý học liệu đã tải lên',icon:'folder-open-outline',path:'/ai'},...common],
   SUBJECT_ADMIN:[{title:'Chuyên môn',icon:'library-outline',path:'/review'},{title:'Môn học',icon:'book-outline',path:'/subjects'},{title:'Chủ đề',icon:'git-branch-outline',path:'/topics'},{title:'Ma trận',icon:'grid-outline',path:'/exams'},...common],
   SYSTEM_ADMIN:[{title:'Khoa',icon:'school-outline',path:'/admin/faculties'},{title:'Chờ phê duyệt',icon:'checkmark-done-outline',path:'/admin/approvals'},{title:'Yêu cầu liên hệ',icon:'mail-outline',path:'/admin/contact'},{title:'Cấu hình Email',icon:'settings-outline',path:'/admin/email-settings'},...common],
 };
