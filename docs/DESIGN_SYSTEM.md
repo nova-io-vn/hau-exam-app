@@ -2,12 +2,22 @@
 
 # Mobile Design System
 
-- Background: `#F5F5F7`
+Mobile dùng cùng nhận diện với HAU Exam Web:
+
+- Primary: `#134D8B`
+- Primary hover: `#0F4177`
+- Primary active: `#0B3768`
+- Primary soft: `#EDF5FC`
+- Background: `#F4F7FA`
 - Surface: `#FFFFFF`
-- Primary text: `#1D1D1F`
-- Secondary text: `#6E6E73`
-- Accent: `#0071E3`
-- Primary dark action: `#111111`
+- Primary text: `#172033`
+- Secondary text: `#667085`
+- Border: `#D9E2EC`
+- Success: `#16835D`
+- Warning: `#D97706`
+- Danger: `#D92D20` (chỉ dùng cho lỗi/hành động nguy hiểm)
+
+Typography ưu tiên `Be Vietnam Pro`, sau đó dùng font hệ thống tương thích React Native.
 
 Buttons/inputs: 8-12px radius.
 Cards: 12-16px.

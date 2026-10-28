@@ -15,7 +15,7 @@ export function AppProviders({ children }: PropsWithChildren) {
   useEffect(() => registerSessionExpiredHandler(() => { void authStore.clear(); }), []);
   useEffect(() => { bootstrapAuth().finally(() => setBootstrapping(false)); }, []);
   const value = useMemo(() => ({ session, bootstrapping, refresh: bootstrapAuth, clear: authStore.clear }), [session, bootstrapping]);
-  return <AuthContext.Provider value={value}><OnboardingTourProvider>{children}</OnboardingTourProvider></AuthContext.Provider>;
+  return <AuthContext.Provider value={value}><OnboardingTourProvider session={session} bootstrapping={bootstrapping}>{children}</OnboardingTourProvider></AuthContext.Provider>;
 }
 
 export function useAuth() {

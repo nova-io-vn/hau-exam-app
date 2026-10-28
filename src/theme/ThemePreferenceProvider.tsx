@@ -14,7 +14,7 @@ async function savePreference(value:ThemePreference){if(Platform.OS==='web'){loc
 export function MobileThemeProvider({children}:PropsWithChildren){
   const systemScheme=useColorScheme();const[preference,setPreferenceState]=useState<ThemePreference>('system');const[ready,setReady]=useState(false);
   useEffect(()=>{readPreference().then(value=>{if(value==='light'||value==='dark'||value==='system')setPreferenceState(value)}).finally(()=>setReady(true))},[]);
-  useEffect(()=>{if(!ready)return;Appearance.setColorScheme(preference==='system'?'unspecified':preference);void savePreference(preference)},[preference,ready]);
+  useEffect(()=>{if(!ready)return;if(Platform.OS!=='web'&&typeof Appearance.setColorScheme==='function')Appearance.setColorScheme(preference==='system'?'unspecified':preference);void savePreference(preference)},[preference,ready]);
   const resolved: 'light'|'dark'=preference==='system'?(systemScheme==='dark'?'dark':'light'):preference;
   const value=useMemo(()=>({preference,resolved,palette:resolved==='dark'?darkColors:colors,setPreference:setPreferenceState,ready}),[preference,resolved,ready]);
   return <Context.Provider value={value}>{children}</Context.Provider>;

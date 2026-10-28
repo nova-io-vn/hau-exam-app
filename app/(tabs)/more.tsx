@@ -17,9 +17,22 @@ const common:Item[]=[
   {title:'Đăng xuất',icon:'log-out-outline',path:'/logout'},
 ];
 const itemsByRole:Record<MobileRole,Item[]>={
-  USER:[{title:'Công việc được giao',subtitle:'Theo dõi chỉ tiêu và tiến độ biên soạn',icon:'clipboard-outline',path:'/assignments'},{title:'AI',subtitle:'Tạo câu hỏi bằng AI',icon:'sparkles-outline',path:'/ai'},{title:'Tài liệu AI',subtitle:'Quản lý học liệu đã tải lên',icon:'folder-open-outline',path:'/ai'},...common],
-  SUBJECT_ADMIN:[{title:'Chuyên môn',icon:'library-outline',path:'/review'},{title:'Môn học',icon:'book-outline',path:'/subjects'},{title:'Chủ đề',icon:'git-branch-outline',path:'/topics'},{title:'Ma trận',icon:'grid-outline',path:'/exams'},...common],
-  SYSTEM_ADMIN:[{title:'Khoa',icon:'school-outline',path:'/admin/faculties'},{title:'Chờ phê duyệt',icon:'checkmark-done-outline',path:'/admin/approvals'},{title:'Yêu cầu liên hệ',icon:'mail-outline',path:'/admin/contact'},{title:'Cấu hình Email',icon:'settings-outline',path:'/admin/email-settings'},...common],
+  USER:[
+    {title:'Công việc được giao',subtitle:'Theo dõi chỉ tiêu và tiến độ biên soạn',icon:'clipboard-outline',path:'/assignments'},
+    {title:'Tài liệu AI',subtitle:'Quản lý học liệu đã tải lên',icon:'folder-open-outline',path:'/(tabs)/documents'},
+    {title:'Thông báo',subtitle:'Xem các cập nhật từ hệ thống',icon:'notifications-outline',path:'/(tabs)/notifications'},
+    ...common,
+  ],
+  SUBJECT_ADMIN:[
+    {title:'Câu hỏi chờ duyệt',subtitle:'Phê duyệt nội dung trong Khoa',icon:'checkmark-done-outline',path:'/review'},
+    {title:'Ma trận và đề thi',subtitle:'Theo dõi ma trận, bộ đề',icon:'grid-outline',path:'/exams'},
+    ...common,
+  ],
+  SYSTEM_ADMIN:[
+    {title:'Quản lý giảng viên',subtitle:'Tra cứu tài khoản và phân quyền',icon:'people-outline',path:'/admin/users'},
+    {title:'Tài khoản chờ duyệt',subtitle:'Phê duyệt đăng ký mới',icon:'checkmark-done-outline',path:'/admin/approvals'},
+    ...common,
+  ],
 };
 
 export default function MoreScreen(){const router=useRouter();const role=(useAuth().session?.role||'USER')as MobileRole;const colors=useThemeColors();return <AppScreen scroll><AppHeader title="Thêm" subtitle="Truy cập các chức năng khác"/><View style={styles.list}>{itemsByRole[role].map(item=><Pressable key={item.title} accessibilityRole="button" onPress={()=>router.push(item.path as never)}><Card style={styles.item}><View style={[styles.icon,{backgroundColor:colors.accentSoft}]}><Ionicons name={item.icon} size={22} color={colors.accent}/></View><View style={styles.copy}><Text style={[styles.title,{color:colors.text}]}>{item.title}</Text>{item.subtitle&&<Text style={[styles.subtitle,{color:colors.textSecondary}]}>{item.subtitle}</Text>}</View><Ionicons name="chevron-forward" size={20} color={colors.textSecondary}/></Card></Pressable>)}</View></AppScreen>}

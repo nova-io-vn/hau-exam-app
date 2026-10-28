@@ -2,9 +2,9 @@
 import { PropsWithChildren, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { usePathname, useRouter } from 'expo-router';
-import { useAuth } from '@/src/app/providers/AppProviders';
 import { colors, radius, spacing, typography } from '@/src/theme/tokens';
 import { CURRENT_ONBOARDING_VERSION, onboardingApi } from './api/onboardingApi';
+import type { Session } from '@/src/types/api';
 
 type Step = { route: string; title: string; description: string };
 type ContextValue = { replay: () => void };
@@ -38,8 +38,8 @@ const steps: Record<string, Step[]> = {
 
 export function useOnboarding() { const value = useContext(OnboardingContext); if (!value) throw new Error('useOnboarding must be used inside OnboardingTourProvider'); return value; }
 
-export function OnboardingTourProvider({ children }: PropsWithChildren) {
-  const { session, bootstrapping } = useAuth(); const router = useRouter(); const pathname = usePathname(); const role = session?.role || 'USER'; const tour = useMemo(() => steps[role] || steps.USER, [role]);
+export function OnboardingTourProvider({ children, session, bootstrapping }: PropsWithChildren<{ session: Session | null; bootstrapping: boolean }>) {
+  const router = useRouter(); const pathname = usePathname(); const role = session?.role || 'USER'; const tour = useMemo(() => steps[role] || steps.USER, [role]);
   const [index, setIndex] = useState(-1); const [state, setState] = useState<{ versionCompleted: number } | null>(null); const [error, setError] = useState('');
   const replay = useCallback(() => { setError(''); setIndex(0); }, []);
   const finish = useCallback(async () => { setIndex(-1); try { await onboardingApi.complete(CURRENT_ONBOARDING_VERSION); } catch { setError('Không thể lưu trạng thái hướng dẫn. Hướng dẫn có thể hiển thị lại ở lần đăng nhập sau.'); } }, []);
